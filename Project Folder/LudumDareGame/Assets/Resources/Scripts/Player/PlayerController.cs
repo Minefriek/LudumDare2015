@@ -97,5 +97,11 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
+
+    public void ReduceScale(float objectMass)
+    {
+        newScale -= new Vector3(objectMass/150, objectMass/150, objectMass/150);
+        thisRB.mass = playerMass;
+    }
 }
 

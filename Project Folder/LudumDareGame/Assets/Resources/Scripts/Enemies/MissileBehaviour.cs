@@ -26,11 +26,14 @@ public class MissileBehaviour : MonoBehaviour {
 	void Update ()
     {
         lifeTimer -= Time.deltaTime;
-
-        
         if(target != null)
         {
             MoveToTarget();
+        }
+
+        if(lifeTimer <= 0.0f)
+        {
+            lifeTimer = lifeSpan;
         }
     }
 
@@ -47,5 +50,20 @@ public class MissileBehaviour : MonoBehaviour {
         {
             thisRB.AddForce(this.transform.forward * (speed * Time.deltaTime));
         } 
+    }
+
+    void OnCollisionEnter(Collision CollidedWithObject)
+    {
+        if(CollidedWithObject.gameObject.tag == "Player")
+        {
+            CollidedWithObject.gameObject.GetComponent<PlayerController>().playerMass -= (CollidedWithObject.gameObject.GetComponent<PlayerController>().playerMass * 0.05f);
+            CollidedWithObject.gameObject.GetComponent<PlayerController>().ReduceScale(thisRB.mass);
+            Destroy(this.gameObject);
+        }
+
+        if(CollidedWithObject.gameObject.name.Contains("Asteroid"))
+        {
+            Destroy(this.gameObject);
+        }
     }
 }

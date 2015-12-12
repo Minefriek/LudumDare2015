@@ -11,13 +11,13 @@ public class MissileLauncherController : MonoBehaviour
     GameObject launcherRight;
     GameObject launcherLeft;
 
-    public float rightAttackTimer;
-    public float leftAttackTimer;
+    public float attackTimer;
+
+    bool rightFired = false;
     // Use this for initialization
     void Start()
     {
-        rightAttackTimer = fireRate;
-        leftAttackTimer = fireRate * 2.0f;
+        attackTimer = fireRate;
 
         launcherRight = this.transform.GetChild(1).gameObject;
         launcherLeft = this.transform.GetChild(2).gameObject;
@@ -33,27 +33,28 @@ public class MissileLauncherController : MonoBehaviour
     {
         if (ObjectEnteringTrigger.tag == "Player" && Vector3.Distance(this.transform.position, ObjectEnteringTrigger.gameObject.transform.position) <= range)
         {
-            Debug.Log(ObjectEnteringTrigger.name);
-            rightAttackTimer -= Time.deltaTime;
-            leftAttackTimer -= Time.deltaTime;
+            attackTimer -= Time.deltaTime;
 
-            if (rightAttackTimer <= 0)
+            if (attackTimer <= 0)
             {
-                GameObject missile = (GameObject)Instantiate(attack, launcherRight.transform.position, Quaternion.identity);
-                rightAttackTimer = fireRate;
-            }
-
-            if (leftAttackTimer <= 0)
-            {
-                GameObject missile = (GameObject)Instantiate(attack, launcherLeft.transform.position, Quaternion.identity);
-                leftAttackTimer = fireRate * 2.0f;
+                if (rightFired == false)
+                {
+                    GameObject missile = (GameObject)Instantiate(attack, launcherRight.transform.position, Quaternion.identity);
+                    attackTimer = fireRate;
+                    rightFired = true;
+                }
+                else
+                {
+                    GameObject missile = (GameObject)Instantiate(attack, launcherLeft.transform.position, Quaternion.identity);
+                    attackTimer = fireRate;
+                    rightFired = false;
+                }
             }
         }
         else
         if(ObjectEnteringTrigger.tag == "Player" && Vector3.Distance(this.transform.position, ObjectEnteringTrigger.gameObject.transform.position) > range)
         {
-            rightAttackTimer = fireRate;
-            leftAttackTimer = fireRate * 2.0f;
+            attackTimer = fireRate;
         }
     }
 
@@ -61,8 +62,7 @@ public class MissileLauncherController : MonoBehaviour
     {
         if (ObjectExitingTrigger.tag == "Player")
         {
-            rightAttackTimer = fireRate;
-            leftAttackTimer = fireRate * 2.0f;
+            attackTimer = fireRate;
         }
     }
 }
