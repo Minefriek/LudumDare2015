@@ -59,15 +59,12 @@ public class ButtonManager : MonoBehaviour
         switch (state)
         {
             case GameState.EPlaying:
-                Debug.Log("Playing!");
                 break;
             case GameState.EWon:
-                Debug.Log("Won!");
                 state = GameState.EPlaying;
                 Application.LoadLevel(0);
                 break;
             case GameState.ELost:
-                Debug.Log("Lost!");
                 state = GameState.EPlaying;
                 Application.LoadLevel(0);
                 break;
